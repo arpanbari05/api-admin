@@ -3,7 +3,8 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const userRouter = require("./routes/userRoute");
-const todoRouter = require("./routes/todoRoute");
+const employeeRouter = require("./routes/employeeRoute");
+const analyticsRouter = require("./routes/analyticsRoute");
 const errorHandler = require("./exceptions/errorHandler");
 
 const app = express();
@@ -32,7 +33,8 @@ app.use(cors());
 app.options("*", cors());
 
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/todos", todoRouter);
+app.use("/api/v1/employees", employeeRouter);
+app.use("/api/v1/analytics", analyticsRouter);
 
 app.use("*", (req, res, next) => {
   res.status(404).json({
