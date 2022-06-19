@@ -32,7 +32,7 @@ exports.getDoc = (model) =>
     const { id } = req.params;
     const data = await model.findById(id);
 
-    if (!data) return next(new AppError("No data found with this ID", 401));
+    if (!data) return next(new AppError("No data found with this ID", 422));
 
     res.status(200).json({
       data,
@@ -42,6 +42,17 @@ exports.getDoc = (model) =>
 exports.getAllDocs = (model) =>
   catchAsync(async (req, res, next) => {
     const data = await model.find({});
+
+    res.status(200).json({
+      data,
+    });
+  });
+
+exports.updateDoc = (model) =>
+  catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+
+    const data = await model.findByIdAndUpdate(id, { ...req.body });
 
     res.status(200).json({
       data,
