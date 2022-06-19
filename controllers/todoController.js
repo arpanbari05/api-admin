@@ -46,6 +46,7 @@ exports.getTodaysTodos = catchAsync(async (req, res, next) => {
   const todos = await todoModel.aggregate([
     {
       $match: {
+        user: _id,
         $or: [
           {
             completedAt: {
@@ -73,21 +74,10 @@ exports.getTodaysTodos = catchAsync(async (req, res, next) => {
 
 exports.getArchivesTodo = catchAsync(async (req, res, next) => {
   const { _id } = req.user;
-  const todos = await todoModel.aggregate([
-    {
-      $match: {
-        user: _id,
-        $or: [
-          {
-            completedAt: {
-              $lte: startOfDay(new Date()),
-              $ne: null,
-            },
-          },
-        ],
-      },
-    },
-  ]);
+  const todos = await todoModel.find({
+    isCompleted: true,
+    user: _id,
+  });
 
   res.status(200).json({
     todos,
