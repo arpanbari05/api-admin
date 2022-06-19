@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const startOfDay = require("date-fns/startOfDay");
+const endOfDay = require("date-fns/endOfDay");
 
 const todoSchema = new mongoose.Schema({
   description: {
@@ -44,10 +46,15 @@ const todoSchema = new mongoose.Schema({
 });
 
 todoSchema.pre(/^find/, function (next) {
-  this.populate({
+  this.sort({ createdAt: -1 }).populate({
     path: "user",
   });
 
+  next();
+});
+
+todoSchema.pre("aggregate", function (next) {
+  this.sort({ createdAt: -1 });
   next();
 });
 
